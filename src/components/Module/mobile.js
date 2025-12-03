@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import "./style.css";
 import * as THREE from "three";
-import { Canvas, useFrame, useLoader } from "react-three-fiber";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import {useSpring} from "react-spring"
 import {a} from "@react-spring/three";
 import { data } from "../../data/data";
