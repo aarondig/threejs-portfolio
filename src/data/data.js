@@ -6,8 +6,7 @@ export const data = [
       "Worked with Visa and our vendor to design a credit card for our Credit Card as a Service customers.",
 
     link: "",
-    banner:
-      "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/credit%20card/large/Banner.png",
+    banner: require("../Assets/Images/Projects/credit card/large/Banner.png"),
 
     tagline: "The Task",
     about: [
@@ -26,23 +25,23 @@ export const data = [
         body: "",
         meta: [
           {
-            src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/credit%20card/small/Card%20Front.png",
+            src: require("../Assets/Images/Projects/credit card/small/Card Front.png"),
             caption: "'Card Front'Design File",
           },
           {
-            src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/credit%20card/small/Card%20Back.png",
+            src: require("../Assets/Images/Projects/credit card/small/Card Back.png"),
             caption: "'Card Back'Design File",
           },
           {
-            src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/credit%20card/small/MVPCard.png",
+            src: require("../Assets/Images/Projects/credit card/small/MVPCard.png"),
             caption: "Marketing Material",
           },
           {
-            src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/credit%20card/small/One%20Card.png",
+            src: require("../Assets/Images/Projects/credit card/small/One Card.png"),
             caption: "Marketing Material",
           },
           {
-            src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/credit%20card/small/Card%20Program.png",
+            src: require("../Assets/Images/Projects/credit card/small/Card Program.png"),
             caption: "Marketing Material",
           },
         ],
@@ -118,39 +117,39 @@ export const data = [
         meta: [
           //Make sure there's an Even number.
           {
-            src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/credit%20card/small/Trans-Wire.png",
+            src: require("../Assets/Images/Projects/credit card/small/Trans-Wire.png"),
             caption: "'Card Front'Design File",
           },
           {
-            src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/credit%20card/small/Trans-Wonky.png",
+            src: require("../Assets/Images/Projects/credit card/small/Trans-Wonky.png"),
             caption: "'Card Back'Design File",
           },
           {
-            src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/credit%20card/small/Trans-MoneyClip.png",
+            src: require("../Assets/Images/Projects/credit card/small/Trans-MoneyClip.png"),
             caption: "Marketing Material",
           },
           {
-            src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/credit%20card/small/Trans-Bookmark.png",
+            src: require("../Assets/Images/Projects/credit card/small/Trans-Bookmark.png"),
             caption: "Marketing Material",
           },
           {
-            src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/credit%20card/small/Square.png",
+            src: require("../Assets/Images/Projects/credit card/small/Square.png"),
             caption: "Marketing Material",
           },
           {
-            src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/credit%20card/small/Back.png",
+            src: require("../Assets/Images/Projects/credit card/small/Back.png"),
             caption: "'Card Front'Design File",
           },
           {
-            src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/credit%20card/small/Clipper-Front.png",
+            src: require("../Assets/Images/Projects/credit card/small/Clipper-Front.png"),
             caption: "Marketing Material",
           },
           {
-            src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/credit%20card/small/Clipper-Back.png",
+            src: require("../Assets/Images/Projects/credit card/small/Clipper-Back.png"),
             caption: "Marketing Material",
           },
-          
-        
+
+
         ],
       },
       {
@@ -173,7 +172,7 @@ export const data = [
             subhead: "Pushing Boundaries",
             subbody:
               `Given creative freedom, I wanted to use transparency within the card to symbolize "blank canvas" that can adapt to any branding or colors.`,
-            src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/credit%20card/small/Transparent%20Mockup.png",
+            src: require("../Assets/Images/Projects/credit card/small/Transparent Mockup.png"),
 
             },
         ],
@@ -228,8 +227,7 @@ export const data = [
       "Design a Credit Card as a Service product with an embeddable rewards system for a pitch to their CTO.",
 
     link: "",
-    banner:
-      "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/lululemon/large/Banner.png",
+    banner: require("../Assets/Images/Projects/lululemon/large/Banner.png"),
 
     tagline: "Building an Ecosystem",
     about: [
@@ -246,7 +244,7 @@ export const data = [
       {
         header: "",
         body: "",
-        src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/lululemon/small/componentfloat.png",
+        src: require("../Assets/Images/Projects/lululemon/small/componentfloat.png"),
         caption:
           "The interface invites users to click the bubble to activate the search.",
 
@@ -393,8 +391,7 @@ export const data = [
       "A social media application for world travelers that allows users to post photos, mark countries they've traveled to, and follow friends.",
 
     link: "https://travel-pins.herokuapp.com",
-    banner:
-      "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/travel%20pins/travelpins.png",
+    banner: require("../Assets/Images/Projects/travel pins/travelpins.png"),
 
     tagline: "Social media for travelers.",
     about: [
@@ -410,7 +407,7 @@ export const data = [
       {
         header: "",
         body: "",
-        src: "https://raw.githubusercontent.com/aarondig/aarondiggdon/main/src/Assets/Images/Projects/travel%20pins/travelpins.png",
+        src: require("../Assets/Images/Projects/travel pins/travelpins.png"),
         caption:
           "The interface invites users to click the bubble to activate the search.",
 
