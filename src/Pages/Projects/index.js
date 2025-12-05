@@ -23,6 +23,8 @@ function Projects({
   handleClick,
   size,
   basename,
+  attractMode,
+  setAttractMode,
 }) {
   //Page Transition
   const navigate = useNavigate();
@@ -66,12 +68,15 @@ function Projects({
     scaleRef: scaleRef,
     setScale: setScale,
     group: group,
+
+    setAttractMode: setAttractMode,
   };
   const titleProps = {
     isCurrent: isCurrent,
     isPopup: isPopup,
     handleClick: handleClick,
     size: size,
+    attractMode: attractMode,
   };
   const bgProps = {
     isCurrent: isCurrent,

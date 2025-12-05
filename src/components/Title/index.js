@@ -72,7 +72,7 @@ function Header({
   );
 }
 
-function Title({ isCurrent, isPopup, handleClick, size }) {
+function Title({ isCurrent, isPopup, handleClick, size, attractMode }) {
   //ANIMATIONS
 
   const springs = useSprings(
@@ -83,8 +83,8 @@ function Title({ isCurrent, isPopup, handleClick, size }) {
         // background: el.background,
       },
       to: {
-        transform: isPopup ? `translateY(${50}px)` : `translateY(-0px)`,
-        opacity: isPopup ? 0 : i === isCurrent ? 1 : 0,
+        transform: isPopup || attractMode ? `translateY(${50}px)` : `translateY(-0px)`,
+        opacity: isPopup || attractMode ? 0 : i === isCurrent ? 1 : 0,
 
         // transform: i === isCurrent ? "translateY(0)" : `translateY(${-30}px)`,
       },
@@ -118,8 +118,14 @@ function Title({ isCurrent, isPopup, handleClick, size }) {
     size: size,
   };
 
+  const titleStyle = useSpring({
+    opacity: attractMode ? 0 : 1,
+    pointerEvents: attractMode ? 'none' : 'all',
+    config: { duration: 300 }
+  });
+
   return (
-    <div id="title">
+    <a.div id="title" style={titleStyle}>
       <div className="left-panel">
         {data.map((el, i) => {
           return <Header el={el} i={i} key={i} {...headerProps} />;
@@ -134,7 +140,7 @@ function Title({ isCurrent, isPopup, handleClick, size }) {
       ) : (
         <></>
       )}
-    </div>
+    </a.div>
   );
 }
 

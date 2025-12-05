@@ -2,7 +2,13 @@
   position: absolute;
   height: 100%;
   width: 100%;
+  z-index: 10;
+  /* Don't block pointer events - let children control their own */
+  pointer-events: none;
+}
 
-  z-index: 1;
+/* Navigation specifically enables pointer events */
+#projectSelector .project-navigation-dots {
+  pointer-events: all;
 }
   

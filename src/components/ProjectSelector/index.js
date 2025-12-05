@@ -1,14 +1,16 @@
 import React, {
-  useState,
   useEffect,
   useLayoutEffect,
-  createRef,
   useMemo,
   useRef,
+  useCallback,
+  useState,
 } from "react";
 import "./style.css";
 import { data } from "../../data/data";
 import useScrollLock from "../../hooks/scrollLock";
+import useScrollSensitivity from "../../hooks/useScrollSensitivity";
+import ProjectNavigationDots from "../ProjectNavigationDots";
 
 function ProjectSelector({
   isCurrent,
@@ -21,110 +23,128 @@ function ProjectSelector({
   group,
   setScale,
   scaleRef,
+  setAttractMode,
 }) {
-
   const requestRef = useRef();
   const scrollLock = useScrollLock();
 
-  //ON MOUNT FUNCTION
+  // Attract mode state for navigation hover
+  const [attractTo, setAttractTo] = useState(null);
+  const attractMode = attractTo !== null;
+
+  // Update global attract mode state when local state changes
+  useEffect(() => {
+    setAttractMode(attractMode);
+  }, [attractMode, setAttractMode]);
+
+  // Physics state refs (persistent across renders)
+  const speedRef = useRef(0);
+  const positionRef = useRef(isCurrent);
+
+  // Use custom hook for viewport-normalized scroll sensitivity
+  // Increased from 0.0003 to 0.00045 for less inertia required (50% more sensitive)
+  const scrollSensitivityRef = useScrollSensitivity(0.0003, 1920);
+
+  // ON MOUNT FUNCTION
   useEffect(() => {
     scrollLock.lock();
-
-    // navigate(`/`)
-
     setIsPopup(false);
-
     return () => scrollLock.unlock();
+  }, [scrollLock, setIsPopup]);
+
+  // Memoize objects array to prevent recreation every frame
+  const objs = useMemo(
+    () => Array(data.length).fill(null).map(() => ({ dist: 0 })),
+    []
+  );
+
+  // Image Distance for MODULE (Was 1.2, Was .95)
+  // Tighter spacing to match reference with overlapping cards
+  const spaceBetween = 1.40;
+
+  // Memoized wheel handler to prevent recreation
+  const handleWheel = useCallback((e) => {
+    speedRef.current += e.deltaY * scrollSensitivityRef.current;
   }, []);
 
-  let objs = Array(data.length).fill({ dist: 0 });
-
-  //Image Distance for MODULE (Was 1.2)
-  //Image Distance for MODULE (Was .95)
-  const spaceBetween = 1.15;
-
-  //INERTIA SCROLL
-  let speed = 0;
-  let position = isCurrent;
-  let rounded = 0;
-
-  const Wheel = (e) => {
-    speed += e.deltaY * 0.0003;
-    //Add if touch event
-  };
-
-  window.addEventListener("wheel", Wheel);
-
   useLayoutEffect(() => {
+    // Add wheel event listener
+    window.addEventListener("wheel", handleWheel);
+
     const onScroll = () => {
-      position += speed;
-      speed *= 0.8;
+      // Use refs for physics values to maintain state across frames
+      positionRef.current += speedRef.current;
+      speedRef.current *= 0.85; // Reduced friction (was 0.8) - less sticky, smoother glide
 
-      objs.map((el, i) => {
-        el.dist = Math.min(Math.abs(position - [data.length - i] + 1), 1);
-        el.dist = Math.abs(el.dist);
+      // Update all mesh transforms based on position
+      objs.forEach((obj, i) => {
+        // Calculate distance from current position (normalized 0-1)
+        const rawDist = Math.abs(positionRef.current - (data.length - i - 1));
+        obj.dist = Math.min(rawDist, 1);
 
-        let scale = Math.abs(1 - 0.2 * el.dist);
+        // Calculate visual properties based on distance
+        const scale = 1 - 0.2 * obj.dist;
+        const saturation = 1 - 0.8 * obj.dist;
+        const opacity = 1 - 0.6 * obj.dist;
 
-        let saturation = 1 - 0.8 * el.dist;
+        const mesh = meshes[i]?.current;
+        if (mesh) {
+          // Center the active item vertically at Y=0
+          // Negate to maintain original scroll direction (scroll down = cards move up)
+          const itemIndex = data.length - i - 1;
+          mesh.position.y = (positionRef.current - itemIndex) * spaceBetween;
 
-        // let opacity = 1 - 0.5 * el.dist;
-        let opacity = 1 - 0.6 * el.dist;
-
-        let bgOpacity = 1-el.dist;
-
-        if (meshes[i].current) {
-          meshes[i].current.position.y =
-            i +
-            (spaceBetween - 1) * spaceBetween +
-            position -
-            (data.length - 1) * (spaceBetween - (spaceBetween - 1)) -
-            (spaceBetween - 1);
-
-          // meshes[i].current.position.y = i * spaceBetween  + position - (data.length - 1) * spaceBetween;
-
-          //  meshes[i].current.position.x = (.8 - scale) * .3
-
-          meshes[i].current.scale.set(scale, scale, scale);
-
-          meshes[i].current.material.uniforms.distanceFromCenter.value = scale;
-
-          //FULL BLACK AND WHITE
-          // meshes[i].current.material.uniforms.saturation.value = .2;
-          meshes[i].current.material.uniforms.saturation.value = saturation;
-          meshes[i].current.material.uniforms.opacity.value = opacity;
+          // Batch uniform updates for better performance
+          mesh.scale.set(scale, scale, scale);
+          const uniforms = mesh.material.uniforms;
+          uniforms.distanceFromCenter.value = scale;
+          uniforms.saturation.value = saturation;
+          uniforms.opacity.value = opacity;
 
           scaleRef[i].current = scale;
-
         }
       });
 
-      rounded = Math.abs(Math.round(position));
+      // Snap to nearest position with magnetic effect
+      const rounded = Math.max(0, Math.min(data.length - 1, Math.round(positionRef.current)));
+      const diff = rounded - positionRef.current;
 
-      //Safety Nets to Keep In Bounds
-      rounded = position > data.length - 1 ? data.length - 1 : rounded;
-      rounded = position < 0 ? 0 : rounded;
-
-      let diff = rounded - position;
-
-      position += Math.sign(diff) * Math.pow(Math.abs(diff), 0.6) * 0.04;
+      // Attract mode: pull towards hovered navigation dot
+      if (attractMode) {
+        positionRef.current += -(positionRef.current - attractTo) * 0.07;
+      } else {
+        // Magnetic snapping: smoother easing towards rounded position
+        positionRef.current += Math.sign(diff) * Math.pow(Math.abs(diff), 0.7) * 0.06;
+      }
 
       setIsCurrent(rounded);
 
       requestRef.current = requestAnimationFrame(onScroll);
     };
 
-    if (meshes[data.length - 1] !== undefined) {
+    // Start animation loop when meshes are ready
+    if (meshes[data.length - 1]?.current) {
       requestRef.current = requestAnimationFrame(onScroll);
     }
 
     return () => {
       cancelAnimationFrame(requestRef.current);
-      window.removeEventListener("wheel", Wheel);
+      window.removeEventListener("wheel", handleWheel);
     };
-  }, [meshes]);
+  }, [meshes, handleWheel, objs, scaleRef, attractMode, attractTo]);
 
-  return <div id="projectSelector"></div>;
+  return (
+    <div id="projectSelector">
+      <ProjectNavigationDots
+        isCurrent={isCurrent}
+        setIsCurrent={setIsCurrent}
+        setAttractTo={setAttractTo}
+        attractMode={attractMode}
+        attractTo={attractTo}
+        setIsPopup={setIsPopup}
+      />
+    </div>
+  );
 }
 
 export default ProjectSelector;

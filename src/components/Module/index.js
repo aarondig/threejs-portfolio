@@ -14,21 +14,19 @@ import { a, useSpring } from "@react-spring/three";
 import { data } from "../../data/data";
 
 const Image = ({ i, mesh, isCurrent, handleClick, isPopup, scaleRef }) => {
-  // const [normalMap] = useLoader(THREE.TextureLoader, [
-  //   `https://raw.githubusercontent.com/aarondig/designPortfolio/main/src/Images/${i}.png`,
-  // ]);
-
   const [normalMap] = useLoader(THREE.TextureLoader, [
     `${data[data.length - i - 1].banner}`,
   ]);
- 
-  //ANISTROPY IS SHARPNESS - Hard on GPU
-  const {gl} = useThree();
 
-useEffect(()=>{
-  const ani = gl.capabilities.getMaxAnisotropy();
-  normalMap.anisotropy = (ani/3) + (ani/2);
-},[])
+  //ANISOTROPY IS SHARPNESS - Hard on GPU
+  const { gl } = useThree();
+
+  // Optimize texture settings on load
+  useEffect(() => {
+    const ani = gl.capabilities.getMaxAnisotropy();
+    normalMap.anisotropy = Math.min(ani / 2, 8); // Cap at 8 for performance
+    normalMap.needsUpdate = true;
+  }, [gl, normalMap]);
  
 
 
@@ -109,49 +107,34 @@ useEffect(()=>{
         distanceFromCenter: { type: "f", value: 0 },
         saturation: { type: "f", value: 0 },
         opacity: { type: "f", value: 0 },
-
         flatVal: { type: "f", value: 0.02 },
-
         texture1: { type: "t", value: normalMap },
         resolution: { type: "v4", value: new THREE.Vector4() },
         uvRate1: { value: new THREE.Vector2(1, 1) },
       },
-
       side: THREE.DoubleSide,
       transparent: true,
       fragmentShader,
       vertexShader,
     }),
-    []
+    [normalMap] // Add normalMap as dependency
   );
 
   useEffect(() => {
     if (!isPopup) {
       shader.uniforms.flatVal.value = 0.02;
     }
-  }, [isPopup]);
+  }, [isPopup, shader.uniforms.flatVal]);
 
-  useFrame(
-    ({ clock }) => (shader.uniforms.time.value = clock.getElapsedTime())
-  );
+  // Combine both useFrame calls into one for better performance
+  useFrame(({ clock }) => {
+    // Update time uniform
+    shader.uniforms.time.value = clock.getElapsedTime();
 
-  useFrame(() => {
-    if (isPopup) {
-      if (shader.uniforms.flatVal.value < 0) {
-        shader.uniforms.flatVal.value = 0;
-      } else {
-        shader.uniforms.flatVal.value = shader.uniforms.flatVal.value - 0.001;
-      }
+    // Update flatVal for popup animation
+    if (isPopup && shader.uniforms.flatVal.value > 0) {
+      shader.uniforms.flatVal.value = Math.max(0, shader.uniforms.flatVal.value - 0.001);
     }
-    //   if (!isPopup) {
-    //     if (shader.uniforms.flatVal.value > .02){
-    //       shader.uniforms.flatVal.value = .02
-    //     } else {
-    //       shader.uniforms.flatVal.value = shader.uniforms.flatVal.value + .0008;
-    //   }
-    // }
-
-    //Ref is now "Mesh"
   });
 
   // useEffect(()=>{
@@ -190,7 +173,8 @@ useEffect(()=>{
 
   return (
     <a.mesh native position-x={positionX} color={data[i].color} {...props}>
-      <planeBufferGeometry args={[1.5, 1, 20, 20]} />
+      <planeBufferGeometry args={[2.2, 1.47, 20, 20]} />
+      {/* Increased size from [1.5, 1] to [2.2, 1.47] to match reference */}
       <shaderMaterial attach="material" uniformsNeedUpdate={true} {...shader} />
     </a.mesh>
   );
@@ -204,19 +188,46 @@ function HandleImages({
   scaleRef,
   setLoading,
   handleClick,
+  attractMode,
 }) {
-  // useEffect(()=>{
-  //   group.current.rotation.x = -.3;
-  //   group.current.rotation.y = -.5;
-  //   group.current.rotation.z = -.1;
+  const { size } = useThree();
+  const [responsiveX, setResponsiveX] = useState(1);
 
-  // },[])
+  // Calculate responsive X position based on viewport and camera
+  useEffect(() => {
+    const aspect = size.width / size.height;
+    const fov = 35; // Match the FOV from camera settings
+    const cameraZ = 8; // Match the camera Z position
+
+    // Calculate visible width at camera's Z distance
+    const vFOV = (fov * Math.PI) / 180;
+    const visibleHeight = 2 * Math.tan(vFOV / 2) * cameraZ;
+    const visibleWidth = visibleHeight * aspect;
+
+    // Position filmstrip to align with right edge
+    // Account for: filmstrip width (2.2), indicator space, and centering
+    const indicatorSpaceWorld = visibleWidth * 0.06; // Reduced space for indicators
+    const filmstripWidth = 2.2; // Updated plane width to match new size
+
+    // Calculate X to align right edge, leaving space for indicators
+    const xPosition = (visibleWidth / 2) - indicatorSpaceWorld - (filmstripWidth / 2);
+
+    setResponsiveX(xPosition);
+  }, [size.width, size.height]);
 
   const { position, rotation } = useSpring({
-    position: isPopup ? [0, 0, 0] : [1, 0, 0],
-    rotation: isPopup ? [0, 0, 0] : [-0.6, -0.8, -0.4],
+    position: isPopup
+      ? [0, 0, 0]
+      : attractMode
+        ? [0, 0, 0] // Center when hovering nav
+        : [responsiveX * 0.7, 0, 0], // Default position
+    rotation: isPopup
+      ? [0, 0, 0]
+      : attractMode
+        ? [0, 0, 0] // Flatten when hovering nav
+        : [-0.5, -0.7, -0.3], // Default tilted rotation
+    config: { mass: 1, tension: 280, friction: 60 }
   });
-  // [-.5, -.9, -.4],
 
   const groupProps = {
     position: position,
@@ -261,6 +272,7 @@ function Module({
   scaleRef,
   handleClick,
   setLoading,
+  attractMode,
 }) {
   const props = {
     refs: meshes,
@@ -274,13 +286,26 @@ function Module({
     isPopup: isPopup,
 
     setLoading: setLoading,
+    attractMode: attractMode,
   };
+
+  // Optimize pixel ratio for performance (cap at 2 for high-DPI displays)
+  const pixelRatio = useMemo(() => Math.min(window.devicePixelRatio, 2), []);
 
   return (
     <div id="canvas">
       <Canvas
-        camera={{ position: [0, 0, 5], fov: 25 }}
-        gl={{ antialias: true, pixelRatio: window.devicePixelRatio }}
+        camera={{
+          position: [0, 0, 8], // Moved from 5 to 8 (further back)
+          fov: 35 // Increased from 25 to 35 to compensate and maintain object size
+        }}
+        gl={{
+          antialias: true,
+          pixelRatio,
+          alpha: false, // Opaque background for better performance
+          powerPreference: "high-performance",
+        }}
+        dpr={pixelRatio}
       >
         <Suspense fallback={null}>
           <HandleImages {...props} />

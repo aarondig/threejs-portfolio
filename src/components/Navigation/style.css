@@ -4,6 +4,8 @@
   height: 20%;
   /* background: red; */
   z-index: 1000;
+  /* Allow clicks to pass through to canvas below */
+  pointer-events: none;
 }
 
 .navWrap {
@@ -34,6 +36,9 @@
   font-weight: 600;
   /* text-transform: uppercase; */
   color: white;
+  /* Re-enable pointer events for interactive element */
+  pointer-events: all;
+  cursor: pointer;
 }
 .backBtn {
   position: absolute;
@@ -44,12 +49,23 @@
   display: flex;
   flex-direction: row;
   gap: 10px;
+  /* Re-enable pointer events for interactive element */
+  pointer-events: all;
+  cursor: pointer;
 }
 .navItem {
   font-size: 22px;
   font-weight: 300;
   color: white;
+  /* Re-enable pointer events for interactive element */
+  pointer-events: all;
+  cursor: pointer;
 }
 :link {
   text-decoration: none;
+}
+
+/* Ensure all navigation links receive pointer events */
+#navigation a {
+  pointer-events: all;
 }

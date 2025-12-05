@@ -29,7 +29,7 @@ function App() {
   const navigate = useNavigate();
   
 
-  //Basic 
+  //Basic
 
   const [isCurrent, setIsCurrent] = useState(0);
 
@@ -40,6 +40,9 @@ function App() {
   const [scaleRef, setScale] = useState([]);
 
   const [isPopup, setIsPopup] = useState(false);
+
+  // Attract mode for navigation
+  const [attractMode, setAttractMode] = useState(false);
 
   //THREEJS REFS
   const [meshes, setMeshes] = useState([]);
@@ -123,6 +126,9 @@ function App() {
     scaleRef: scaleRef,
     setScale: setScale,
     group: group,
+
+    attractMode: attractMode,
+    setAttractMode: setAttractMode,
   };
 
   const projectProps = {
@@ -137,7 +143,7 @@ function App() {
   };
 
   const moduleProps = {
-    
+
     isCurrent: isCurrent,
     isPopup: isPopup,
 
@@ -150,6 +156,8 @@ function App() {
     scaleRef: scaleRef,
 
     handleClick: handleClick,
+
+    attractMode: attractMode,
   };
 
   const navProps = {
