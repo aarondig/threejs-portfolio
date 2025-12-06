@@ -1,24 +1,24 @@
 .project-navigation-dots {
   position: fixed;
-  right: 50px;
+  right: clamp(30px, 3vw, 60px);
   top: 50%;
   transform: translateY(-50%);
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: clamp(15px, 1.5vw, 25px);
   align-items: flex-end;
   pointer-events: all;
-  padding: 30px 0;
+  padding: clamp(20px, 2vw, 35px) 0;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .project-navigation-dots.container-hovered {
-  padding: 30px 40px;
-  padding-left: 60px;
+  padding: clamp(20px, 2vw, 35px) clamp(30px, 3vw, 50px);
+  padding-left: clamp(40px, 4vw, 70px);
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(20px);
-  border-radius: 60px;
+  border-radius: clamp(40px, 4vw, 70px);
 }
 
 .nav-dot {
@@ -26,14 +26,14 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 20px;
+  gap: clamp(15px, 1.5vw, 25px);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-dot-indicator {
-  width: 8px;
-  height: 8px;
+  width: clamp(6px, 0.6vw, 10px);
+  height: clamp(6px, 0.6vw, 10px);
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.4);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -47,8 +47,8 @@
 
 .nav-dot.active .nav-dot-indicator {
   background-color: rgba(255, 255, 255, 1);
-  width: 10px;
-  height: 10px;
+  width: clamp(8px, 0.8vw, 12px);
+  height: clamp(8px, 0.8vw, 12px);
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
 }
 
@@ -59,14 +59,14 @@
 
 .nav-dot-label {
   white-space: nowrap;
-  font-size: 13px;
+  font-size: clamp(11px, 1vw, 15px);
   font-weight: 600;
   color: rgba(255, 255, 255, 0.5);
   opacity: 0;
   pointer-events: all;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: clamp(0.5px, 0.08vw, 1.5px);
   transform: translateX(10px);
 }
 

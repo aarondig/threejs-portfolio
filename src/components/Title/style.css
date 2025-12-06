@@ -51,7 +51,7 @@
 
 #title .title {
   /* font-family: "Basier"; */
-  font-size: 5rem;
+  font-size: clamp(3rem, 8vw, 7rem);
   font-weight: 400;
   margin-bottom: 0.5%;
   margin-top: 0;
@@ -59,29 +59,29 @@
   color: white;
 }
 #title .subtitle {
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 2.5vw, 2rem);
   color: #fff;
   width: 100%;
   opacity: .5;
- 
+
 }
 
 .btn {
   width: fit-content;
   height: fit-content;
   border: 1px solid;
-  margin-top: 8%;
+  margin-top: clamp(1rem, 2vw, 2rem);
   pointer-events:all;
 }
 .btn-text {
   font-family: "basier";
-  font-size: 18px;
+  font-size: clamp(14px, 1.2vw, 20px);
   font-weight: 400;
   color: white;
-  margin-top: 16px;
-  margin-bottom: 16px;
-  margin-left: 32px;
-  margin-right: 32px;
+  margin-top: clamp(12px, 1vw, 18px);
+  margin-bottom: clamp(12px, 1vw, 18px);
+  margin-left: clamp(24px, 2vw, 36px);
+  margin-right: clamp(24px, 2vw, 36px);
   pointer-events: none;
 }
 

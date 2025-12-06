@@ -174,7 +174,6 @@ const Image = ({ i, mesh, isCurrent, handleClick, isPopup, scaleRef }) => {
   return (
     <a.mesh native position-x={positionX} color={data[i].color} {...props}>
       <planeBufferGeometry args={[2.2, 1.47, 20, 20]} />
-      {/* Increased size from [1.5, 1] to [2.2, 1.47] to match reference */}
       <shaderMaterial attach="material" uniformsNeedUpdate={true} {...shader} />
     </a.mesh>
   );
@@ -191,31 +190,39 @@ function HandleImages({
   attractMode,
 }) {
   const { size } = useThree();
-  const [responsiveX, setResponsiveX] = useState(1);
+  const [groupScale, setGroupScale] = useState(1);
 
-  // Calculate responsive X position based on viewport and camera
-  useEffect(() => {
-    const aspect = size.width / size.height;
+  // Static X position - calculated once and never changes
+  const responsiveX = useMemo(() => {
+    const fixedAspect = 16 / 9; // Standard widescreen aspect
     const fov = 35; // Match the FOV from camera settings
     const cameraZ = 8; // Match the camera Z position
 
-    // Calculate visible width at camera's Z distance
+    // Calculate visible width at camera's Z distance using FIXED aspect
     const vFOV = (fov * Math.PI) / 180;
     const visibleHeight = 2 * Math.tan(vFOV / 2) * cameraZ;
-    const visibleWidth = visibleHeight * aspect;
+    const visibleWidth = visibleHeight * fixedAspect;
 
-    // Position filmstrip to align with right edge
-    // Account for: filmstrip width (2.2), indicator space, and centering
-    const indicatorSpaceWorld = visibleWidth * 0.06; // Reduced space for indicators
-    const filmstripWidth = 2.2; // Updated plane width to match new size
+    // Position filmstrip based on FIXED visible width
+    const indicatorSpaceWorld = visibleWidth * 0.06;
+    const filmstripWidth = 2.2;
 
-    // Calculate X to align right edge, leaving space for indicators
-    const xPosition = (visibleWidth / 2) - indicatorSpaceWorld - (filmstripWidth / 2);
+    // Return static X position
+    return (visibleWidth / 2) - indicatorSpaceWorld - (filmstripWidth / 2);
+  }, []); // Empty deps = calculates only once
 
-    setResponsiveX(xPosition);
-  }, [size.width, size.height]);
+  // Calculate group scale based on viewport WIDTH ONLY
+  useEffect(() => {
+    // Reference breakpoints from images:
+    // - Small (1366x768 = 1.78:1): smaller cards
+    // - Medium (1920x1080 = 1.78:1): base size
+    // - Large (2560x1440 = 1.78:1): larger cards
+    const baseWidth = 1366; // Lower base for larger default scale
+    const scaleFactor = Math.max(0.8, Math.min(2.2, size.width / baseWidth));
+    setGroupScale(scaleFactor);
+  }, [size.width]);
 
-  const { position, rotation } = useSpring({
+  const { position, rotation, scale } = useSpring({
     position: isPopup
       ? [0, 0, 0]
       : attractMode
@@ -226,12 +233,16 @@ function HandleImages({
       : attractMode
         ? [0, 0, 0] // Flatten when hovering nav
         : [-0.5, -0.7, -0.3], // Default tilted rotation
+    scale: isPopup
+      ? [1, 1, 1]
+      : [groupScale, groupScale, groupScale], // Apply responsive scale
     config: { mass: 1, tension: 280, friction: 60 }
   });
 
   const groupProps = {
     position: position,
     rotation: rotation,
+    scale: scale,
   };
 
   const props = {
@@ -297,7 +308,8 @@ function Module({
       <Canvas
         camera={{
           position: [0, 0, 8], // Moved from 5 to 8 (further back)
-          fov: 35 // Increased from 25 to 35 to compensate and maintain object size
+          fov: 35, // Increased from 25 to 35 to compensate and maintain object size
+          aspect: 16 / 9 // Lock aspect ratio to match responsiveX calculation
         }}
         gl={{
           antialias: true,

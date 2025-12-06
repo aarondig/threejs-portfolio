@@ -62,7 +62,7 @@ function Loader({ children, basename }) {
       friction: 100,
       
     },
-    onRest: () => navigate(`projects`),
+    onRest: () => navigate(`/projects`),
     imgRef
   })
   

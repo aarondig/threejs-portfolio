@@ -21,7 +21,7 @@ import Loader from "../../Pages/Loader";
 function App() {
 
   //ROUTER
-  const basename = "aarondiggdon";
+  const basename = "";
 
   const size = useWindowSize();
 
@@ -80,26 +80,26 @@ function App() {
 
   //REFRESH HANDLING
   useEffect(() => {
-    
+
     let url = location.pathname;
 
     //Change when loader Is built
     if (url === "/") {
-      navigate(`${basename}/`, { replace: true });
+      navigate(`/`, { replace: true });
     }
     // data.map((el, i) => {
-    //   if (url === `/${basename}/projects/${el.id}`) {
+    //   if (url === `/projects/${el.id}`) {
     //     setIsPopup(true);
     //   }
     // });
 
-    if (url === `/${basename}/projects/`) {
+    if (url === `/projects/`) {
       setIsPopup(false);
     }
-    if (url === `/${basename}/projects`) {
+    if (url === `/projects`) {
       setIsPopup(false);
     }
-  
+
 },[location]);
 
   //Props Passed to Pages
@@ -175,10 +175,9 @@ function App() {
         <Routes>
           {/* Maybe Loader route shouldn't be a nester? */}
 
-            <Route path={`/`}/>
-            <Route path={`${basename}`} element={<Loader basename={basename} />} />
+            <Route path={`/`} element={<Loader basename={basename} />} />
             <Route
-              path={`${basename}/projects`}
+              path={`/projects`}
               element={<Projects {...projectsProps} />}
             >
               <Route
@@ -186,8 +185,8 @@ function App() {
                 element={<ProjectLoader {...projectProps} />}
               />
             </Route>
-            <Route path={`${basename}/about`} element={<About />} />
-          
+            <Route path={`/about`} element={<About />} />
+
         </Routes>
       </AnimatePresence>
       <Module {...moduleProps} />

@@ -36,7 +36,7 @@ function Projects({
   useEffect(() => {
     let url = location.pathname;
     data.map((el, i) => {
-      if (url === `/${basename}/projects/${el.id}`) {
+      if (url === `/projects/${el.id}`) {
         setIsCurrent(i);
         setIsPopup(true);
         setIsMatch(true);

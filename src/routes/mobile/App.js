@@ -20,7 +20,7 @@ function App() {
   const [isPopup, setIsPopup] = useState(false);
 
   //ROUTER
-  const basename = "aarondiggdon";
+  const basename = "";
 
   const location = useLocation();
   
@@ -52,18 +52,17 @@ function App() {
 
       
         <Routes>
-        
+
 
             <Route path={`/`} element={<Landing {...landingProps}/>}/>
-            <Route path={`/${basename}/`} element={<Landing {...landingProps}/>}/>
-            <Route path={`${basename}/projects`} element={<Projects {...projectsProps}/>} >
+            <Route path={`/projects`} element={<Projects {...projectsProps}/>} >
             <Route
                 path={`:id`}
                 element={<ProjectLoader />}
               />
             </Route>
-            
-          
+
+
         </Routes>
 
     </Wrapper>

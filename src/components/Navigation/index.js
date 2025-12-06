@@ -9,7 +9,7 @@ function Navigation({ location, basename, setIsPopup }) {
 
   //Checking Location Match
   const [isMatch, setIsMatch] = useState(false);
-  const match = useMatch(`/${basename}/projects/:id`, {
+  const match = useMatch(`/projects/:id`, {
     path: location.pathname,
     exact: true,
     strict: true,
@@ -30,8 +30,8 @@ function Navigation({ location, basename, setIsPopup }) {
 
   const backBtn = useSpring({
     // opacity: location.pathname !== `/${basename}/` ? 1 : 0,
-    opacity: location.pathname === `/${basename}/about` ? 1 : (isMatch ? 1 : 0),
-    color: location.pathname === `/${basename}/about` ? "#252525" : "white",
+    opacity: location.pathname === `/about` ? 1 : (isMatch ? 1 : 0),
+    color: location.pathname === `/about` ? "#252525" : "white",
   });
 
   const Back = () => {
@@ -53,7 +53,7 @@ function Navigation({ location, basename, setIsPopup }) {
           </a.div>
         </div>
         <div className="rightNav">
-          <Link to={`/${basename}/about`}>
+          <Link to={`/about`}>
             <div className="navItem">About Me</div>
           </Link>
         </div>

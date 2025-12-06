@@ -32,7 +32,7 @@
 }
 #logo {
   position: absolute;
-  font-size: 22px;
+  font-size: clamp(16px, 1.5vw, 26px);
   font-weight: 600;
   /* text-transform: uppercase; */
   color: white;
@@ -42,19 +42,19 @@
 }
 .backBtn {
   position: absolute;
-  font-size: 22px;
+  font-size: clamp(16px, 1.5vw, 26px);
   font-weight: 300;
   /* text-transform: uppercase; */
   color: white;
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: clamp(8px, 0.8vw, 12px);
   /* Re-enable pointer events for interactive element */
   pointer-events: all;
   cursor: pointer;
 }
 .navItem {
-  font-size: 22px;
+  font-size: clamp(16px, 1.5vw, 26px);
   font-weight: 300;
   color: white;
   /* Re-enable pointer events for interactive element */

@@ -14,8 +14,7 @@ function ProjectNavigationDots({ isCurrent, setIsCurrent, setAttractTo, attractM
     // Also set attract mode for smooth transition
     setAttractTo(index);
     // Close the popup/active state by navigating to projects page
-    const basename = location.pathname.split('/')[1];
-    navigate(`/${basename}/projects/`);
+    navigate(`/projects/`);
     setIsPopup(false);
   };
 
