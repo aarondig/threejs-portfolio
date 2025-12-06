@@ -191,36 +191,35 @@ function HandleImages({
 }) {
   const { size } = useThree();
   const [groupScale, setGroupScale] = useState(1);
+  const [responsiveX, setResponsiveX] = useState(3.5);
 
-  // Static X position - calculated once and never changes
-  const responsiveX = useMemo(() => {
-    const fixedAspect = 16 / 9; // Standard widescreen aspect
-    const fov = 35; // Match the FOV from camera settings
-    const cameraZ = 8; // Match the camera Z position
-
-    // Calculate visible width at camera's Z distance using FIXED aspect
-    const vFOV = (fov * Math.PI) / 180;
-    const visibleHeight = 2 * Math.tan(vFOV / 2) * cameraZ;
-    const visibleWidth = visibleHeight * fixedAspect;
-
-    // Position filmstrip based on FIXED visible width
-    const indicatorSpaceWorld = visibleWidth * 0.06;
-    const filmstripWidth = 2.2;
-
-    // Return static X position
-    return (visibleWidth / 2) - indicatorSpaceWorld - (filmstripWidth / 2);
-  }, []); // Empty deps = calculates only once
-
-  // Calculate group scale based on viewport WIDTH ONLY
+  // Calculate scale based on WIDTH only
   useEffect(() => {
-    // Reference breakpoints from images:
-    // - Small (1366x768 = 1.78:1): smaller cards
-    // - Medium (1920x1080 = 1.78:1): base size
-    // - Large (2560x1440 = 1.78:1): larger cards
-    const baseWidth = 1366; // Lower base for larger default scale
+    const baseWidth = 1366;
     const scaleFactor = Math.max(0.8, Math.min(2.2, size.width / baseWidth));
     setGroupScale(scaleFactor);
-  }, [size.width]);
+  }, [size.width]); // Only width dependency
+
+  // Calculate position to keep cards in same screen position despite aspect ratio changes
+  useEffect(() => {
+    const aspect = size.width / size.height;
+    const fov = 35;
+    const cameraZ = 8;
+
+    // Calculate visible world width at camera Z distance
+    const vFOV = (fov * Math.PI) / 180;
+    const visibleHeight = 2 * Math.tan(vFOV / 2) * cameraZ;
+    const visibleWidth = visibleHeight * aspect;
+
+    // Right-align cards with constant screen-space margin
+    const rightEdgeMarginPercent = 0.1; // 10% from right edge in screen space
+    const cardGroupWidth = 2.2; // Base card width (not scaled)
+
+    // Calculate position to maintain right alignment
+    const xPosition = (visibleWidth / 2) - (visibleWidth * rightEdgeMarginPercent) - (cardGroupWidth / 2);
+
+    setResponsiveX(xPosition);
+  }, [size.width, size.height]); // Recalculate when aspect ratio changes
 
   const { position, rotation, scale } = useSpring({
     position: isPopup
@@ -308,8 +307,7 @@ function Module({
       <Canvas
         camera={{
           position: [0, 0, 8], // Moved from 5 to 8 (further back)
-          fov: 35, // Increased from 25 to 35 to compensate and maintain object size
-          aspect: 16 / 9 // Lock aspect ratio to match responsiveX calculation
+          fov: 35 // Increased from 25 to 35 to compensate and maintain object size
         }}
         gl={{
           antialias: true,

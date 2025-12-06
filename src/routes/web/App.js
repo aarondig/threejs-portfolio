@@ -83,10 +83,6 @@ function App() {
 
     let url = location.pathname;
 
-    //Change when loader Is built
-    if (url === "/") {
-      navigate(`/`, { replace: true });
-    }
     // data.map((el, i) => {
     //   if (url === `/projects/${el.id}`) {
     //     setIsPopup(true);
