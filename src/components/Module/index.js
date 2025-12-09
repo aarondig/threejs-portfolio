@@ -196,7 +196,7 @@ function HandleImages({
   // Calculate scale based on WIDTH only
   useEffect(() => {
     const baseWidth = 1366;
-    const scaleFactor = Math.max(0.8, Math.min(2.2, size.width / baseWidth));
+    const scaleFactor = Math.max(1.0, Math.min(2.4, size.width / baseWidth)); // Increased from 0.8-2.2 to 1.0-2.4
     setGroupScale(scaleFactor);
   }, [size.width]); // Only width dependency
 
@@ -212,7 +212,7 @@ function HandleImages({
     const visibleWidth = visibleHeight * aspect;
 
     // Right-align cards with constant screen-space margin
-    const rightEdgeMarginPercent = 0.1; // 10% from right edge in screen space
+    const rightEdgeMarginPercent = 0.05; // Reduced from 0.1 to 0.05 (5% from right edge - closer to edge)
     const cardGroupWidth = 2.2; // Base card width (not scaled)
 
     // Calculate position to maintain right alignment
