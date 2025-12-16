@@ -50,7 +50,17 @@ function App() {
 
   //PAGE TRANSITION
 
-  const handleClick = (e) => {
+  const handleClick = (e, clickedIndex) => {
+    // If an index was provided (mesh was clicked)
+    if (clickedIndex !== undefined) {
+      // If clicking an inactive mesh, just scroll to it (don't open popup)
+      if (clickedIndex !== isCurrent) {
+        setIsCurrent(clickedIndex); // This will trigger smooth scroll in ProjectSelector
+        return; // Don't open popup, just scroll to it
+      }
+      // If clicking the already active mesh, open the popup
+      setIsCurrent(clickedIndex);
+    }
     setIsPopup(true);
   };
 

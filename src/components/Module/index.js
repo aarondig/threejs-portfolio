@@ -124,21 +124,6 @@ const Image = ({ i, mesh, isCurrent, handleClick, isPopup, scaleRef, attractMode
     }),
     [normalMap] // Add normalMap as dependency
   );
-
-  // Combine both useFrame calls into one for better performance
-  useFrame(({ clock }) => {
-    // Update time uniform
-    shader.uniforms.time.value = clock.getElapsedTime();
-
-    // Update flatVal for popup or attractMode animation (increased speed from 0.001 to 0.003)
-    if ((isPopup || attractMode) && shader.uniforms.flatVal.value > 0) {
-      shader.uniforms.flatVal.value = Math.max(0, shader.uniforms.flatVal.value - 0.003);
-    }
-
-    if (!(isPopup || attractMode) && shader.uniforms.flatVal.value < curve) {
-      shader.uniforms.flatVal.value = Math.min(curve, shader.uniforms.flatVal.value + 0.003);
-    }
-  });
  
 
 
@@ -156,14 +141,32 @@ const Image = ({ i, mesh, isCurrent, handleClick, isPopup, scaleRef, attractMode
 
     rotation: rotation,
 
-    onClick: (e) => handleClick(e),
+    onClick: (e) => {
+      e.stopPropagation();
+      // Calculate the actual data index from reversed array
+      const dataIndex = data.length - i - 1;
+      handleClick(e, dataIndex);
+    },
 
     key: i,
     value: i,
   };
 
   return (
-    <a.mesh native position-x={positionX} color={data[i].color} {...props}>
+    <a.mesh
+      native
+      position-x={positionX}
+      color={data[i].color}
+      {...props}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        document.body.style.cursor = 'pointer';
+      }}
+      onPointerOut={(e) => {
+        e.stopPropagation();
+        document.body.style.cursor = 'default';
+      }}
+    >
       <planeBufferGeometry args={[2.60, 1.70, 20, 25]} />
       <shaderMaterial attach="material" uniformsNeedUpdate={true} {...shader} />
     </a.mesh>
@@ -183,6 +186,32 @@ function HandleImages({
   const { size } = useThree();
   const [groupScale, setGroupScale] = useState(1);
   const [responsiveX, setResponsiveX] = useState(3.5);
+
+  const curve = 0.05; // Curvature intensity
+
+  // Consolidated animation loop for ALL meshes - single useFrame for performance
+  useFrame(({ clock }) => {
+    const elapsedTime = clock.getElapsedTime();
+
+    refs.forEach((meshRef) => {
+      const mesh = meshRef?.current;
+      if (mesh?.material?.uniforms) {
+        const uniforms = mesh.material.uniforms;
+
+        // Update time uniform for wave animation
+        uniforms.time.value = elapsedTime;
+
+        // Update flatVal for curve flattening animation
+        if ((isPopup || attractMode) && uniforms.flatVal.value > 0) {
+          uniforms.flatVal.value = Math.max(0, uniforms.flatVal.value - 0.003);
+        }
+
+        if (!(isPopup || attractMode) && uniforms.flatVal.value < curve) {
+          uniforms.flatVal.value = Math.min(curve, uniforms.flatVal.value + 0.003);
+        }
+      }
+    });
+  });
 
   // Calculate scale based on WIDTH only
   useEffect(() => {

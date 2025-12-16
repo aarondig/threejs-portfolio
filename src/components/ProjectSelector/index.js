@@ -41,6 +41,19 @@ function ProjectSelector({
   const speedRef = useRef(0);
   const positionRef = useRef(isCurrent);
 
+  // Track target position for external navigation (e.g., clicking a mesh)
+  const targetPositionRef = useRef(null);
+
+  // Detect when isCurrent changes externally (e.g., from mesh click)
+  useEffect(() => {
+    const currentRounded = Math.round(positionRef.current);
+    // If isCurrent changed but doesn't match our current scroll position
+    if (isCurrent !== currentRounded && targetPositionRef.current !== isCurrent) {
+      // Set target to trigger smooth scroll in animation loop
+      targetPositionRef.current = isCurrent;
+    }
+  }, [isCurrent]);
+
   // Use custom hook for viewport-normalized scroll sensitivity
   // Reduced sensitivity for smoother, more controlled scrolling with dampening
   // Lower value = slower response = easier to control across all input devices
@@ -140,6 +153,14 @@ function ProjectSelector({
       if (attractMode) {
         // Smooth interpolation for navigation dot interaction
         positionRef.current += -(positionRef.current - attractTo) * 0.08;
+      } else if (targetPositionRef.current !== null) {
+        // Smooth interpolation when navigating to a clicked mesh
+        positionRef.current += -(positionRef.current - targetPositionRef.current) * 0.08;
+
+        // Clear target when we're close enough
+        if (Math.abs(positionRef.current - targetPositionRef.current) < 0.01) {
+          targetPositionRef.current = null;
+        }
       } else {
         // Softer magnetic snapping - more interpretive, less aggressive
         // Only apply when velocity is low (user has stopped scrolling)
