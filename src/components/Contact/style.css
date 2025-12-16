@@ -1,7 +1,3 @@
-/* #contact {
-  position: absolute;
-  z-index: 2;
-} */
 .contact-list {
   position: absolute;
   display: flex;

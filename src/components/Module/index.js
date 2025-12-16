@@ -13,7 +13,12 @@ import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
 import { a, useSpring } from "@react-spring/three";
 import { data } from "../../data/data";
 
-const Image = ({ i, mesh, isCurrent, handleClick, isPopup, scaleRef }) => {
+const Image = ({ i, mesh, isCurrent, handleClick, isPopup, scaleRef, attractMode }) => {
+  
+  const curve = 0.05; // Adjust curvature intensity here
+  
+  
+  
   const [normalMap] = useLoader(THREE.TextureLoader, [
     `${data[data.length - i - 1].banner}`,
   ]);
@@ -77,7 +82,7 @@ const Image = ({ i, mesh, isCurrent, handleClick, isPopup, scaleRef }) => {
   float PI = 3.141592653589793238;
   uniform float distanceFromCenter;
   void main() {
-    
+
     vUv = (uv - vec2(.5))*(.85 * distanceFromCenter + .07) + vec2(.5);
 
     // NOT BEING USED: vUv = (uv - vec2(.5))*(0.8 - 0.2 * distanceFromCenter * (1. - distanceFromCenter)) + vec2(.5);
@@ -91,8 +96,8 @@ const Image = ({ i, mesh, isCurrent, handleClick, isPopup, scaleRef }) => {
     pos.x += sin(PI*uv.x)* flatVal;
     pos.y += sin(PI*uv.x)* flatVal;
     pos.z += sin(PI*uv.x)* flatVal;
-    
-    
+
+
     pos.y += sin(time*.8)*.04;
     vUv.y += sin(time*.8)*.04;
 
@@ -107,7 +112,7 @@ const Image = ({ i, mesh, isCurrent, handleClick, isPopup, scaleRef }) => {
         distanceFromCenter: { type: "f", value: 0 },
         saturation: { type: "f", value: 0 },
         opacity: { type: "f", value: 0 },
-        flatVal: { type: "f", value: 0.02 },
+        flatVal: { type: "f", value: curve },
         texture1: { type: "t", value: normalMap },
         resolution: { type: "v4", value: new THREE.Vector4() },
         uvRate1: { value: new THREE.Vector2(1, 1) },
@@ -120,44 +125,30 @@ const Image = ({ i, mesh, isCurrent, handleClick, isPopup, scaleRef }) => {
     [normalMap] // Add normalMap as dependency
   );
 
-  useEffect(() => {
-    if (!isPopup) {
-      shader.uniforms.flatVal.value = 0.02;
-    }
-  }, [isPopup, shader.uniforms.flatVal]);
-
   // Combine both useFrame calls into one for better performance
   useFrame(({ clock }) => {
     // Update time uniform
     shader.uniforms.time.value = clock.getElapsedTime();
 
-    // Update flatVal for popup animation
-    if (isPopup && shader.uniforms.flatVal.value > 0) {
-      shader.uniforms.flatVal.value = Math.max(0, shader.uniforms.flatVal.value - 0.001);
+    // Update flatVal for popup or attractMode animation (increased speed from 0.001 to 0.003)
+    if ((isPopup || attractMode) && shader.uniforms.flatVal.value > 0) {
+      shader.uniforms.flatVal.value = Math.max(0, shader.uniforms.flatVal.value - 0.003);
+    }
+
+    if (!(isPopup || attractMode) && shader.uniforms.flatVal.value < curve) {
+      shader.uniforms.flatVal.value = Math.min(curve, shader.uniforms.flatVal.value + 0.003);
     }
   });
-
-  // useEffect(()=>{
-  //   if (isPopup) {
-  //     mesh.current.rotation.y = -.5;
-  //     mesh.current.rotation.x = -.3;
-  //     mesh.current.rotation.z = -.1;
-  //   }
-   
-  // },[])
+ 
 
 
   //Basically if Index === isCurrent
   const target = data.length - isCurrent - 1;
 
   const { rotation, positionX, } = useSpring({
-    rotation: isPopup ? [0, 0, 0] : [0.0, 0.0, 0],
-    positionX: isPopup ? (i === target ? 0 : 6) : 0,
+    rotation: (isPopup || attractMode) ? [0, 0, 0] : [0.0, 0.0, 0],
+    positionX: isPopup ? (i === target ? 0 : 6) : 0, // Only hide non-active cards in popup mode, not attract mode
 
-    // scale: i === target ? (isPopup ? [1.5, 1.5, 1.5] : [scaleRef, scaleRef, scaleRef]) : [scaleRef, scaleRef, scaleRef],
-
-    // duration: 1000,
-    // delay: i === target ? 0 : ((data.length - i)) * 80,
   });
 
   const props = {
@@ -173,7 +164,7 @@ const Image = ({ i, mesh, isCurrent, handleClick, isPopup, scaleRef }) => {
 
   return (
     <a.mesh native position-x={positionX} color={data[i].color} {...props}>
-      <planeBufferGeometry args={[2.2, 1.47, 20, 20]} />
+      <planeBufferGeometry args={[2.60, 1.70, 20, 25]} />
       <shaderMaterial attach="material" uniformsNeedUpdate={true} {...shader} />
     </a.mesh>
   );
@@ -222,17 +213,13 @@ function HandleImages({
   }, [size.width, size.height]); // Recalculate when aspect ratio changes
 
   const { position, rotation, scale } = useSpring({
-    position: isPopup
+    position: (isPopup || attractMode)
       ? [0, 0, 0]
-      : attractMode
-        ? [0, 0, 0] // Center when hovering nav
-        : [responsiveX * 0.7, 0, 0], // Default position
-    rotation: isPopup
-      ? [0, 0, 0]
-      : attractMode
-        ? [0, 0, 0] // Flatten when hovering nav
-        : [-0.5, -0.7, -0.3], // Default tilted rotation
-    scale: isPopup
+      : [responsiveX * 0.7, 0, 0], // Default position
+    rotation: (isPopup || attractMode)
+      ? ((attractMode) ? [-.8, 0, 0] : [0, 0, 0]) // Face viewer directly during attract mode and popup
+      : [-0.5, -0.7, -0.3], // Tilted rotation for default state
+    scale: (isPopup || attractMode)
       ? [1, 1, 1]
       : [groupScale, groupScale, groupScale], // Apply responsive scale
     config: { mass: 1, tension: 280, friction: 60 }
@@ -251,6 +238,7 @@ function HandleImages({
     isPopup: isPopup,
 
     setLoading: setLoading,
+    attractMode: attractMode,
   };
 
   return (
@@ -302,13 +290,17 @@ function Module({
   // Optimize pixel ratio for performance (cap at 2 for high-DPI displays)
   const pixelRatio = useMemo(() => Math.min(window.devicePixelRatio, 2), []);
 
+  // Camera config based on device (mobile gets different settings)
+  const cameraConfig = useMemo(() =>
+    isMobile
+      ? { position: [0, 0, 5], fov: 25 }  // Mobile: closer camera, narrower FOV
+      : { position: [0, 0, 12], fov: 25 }   // Desktop: current settings
+  , [isMobile]);
+
   return (
     <div id="canvas">
       <Canvas
-        camera={{
-          position: [0, 0, 8], // Moved from 5 to 8 (further back)
-          fov: 35 // Increased from 25 to 35 to compensate and maintain object size
-        }}
+        camera={cameraConfig}
         gl={{
           antialias: true,
           pixelRatio,

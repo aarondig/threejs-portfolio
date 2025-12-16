@@ -42,8 +42,9 @@ function ProjectSelector({
   const positionRef = useRef(isCurrent);
 
   // Use custom hook for viewport-normalized scroll sensitivity
-  // Increased from 0.0003 to 0.00045 for less inertia required (50% more sensitive)
-  const scrollSensitivityRef = useScrollSensitivity(0.0003, 1920);
+  // Reduced sensitivity for smoother, more controlled scrolling with dampening
+  // Lower value = slower response = easier to control across all input devices
+  const scrollSensitivityRef = useScrollSensitivity(0.00018, 1920);
 
   // ON MOUNT FUNCTION
   useEffect(() => {
@@ -58,9 +59,9 @@ function ProjectSelector({
     []
   );
 
-  // Image Distance for MODULE (Was 1.2, Was .95)
-  // Tighter spacing to match reference with overlapping cards
-  const spaceBetween = 1.40;
+  // Image Distance for MODULE (Was 1.2, Was .95, Was 1.40)
+  // Adjusted spacing to add more gap between cards
+  const spaceBetween = 1.70;
 
   // Memoized wheel handler to prevent recreation
   const handleWheel = useCallback((e) => {
@@ -72,9 +73,33 @@ function ProjectSelector({
     window.addEventListener("wheel", handleWheel);
 
     const onScroll = () => {
-      // Use refs for physics values to maintain state across frames
-      positionRef.current += speedRef.current;
-      speedRef.current *= 0.85; // Reduced friction (was 0.8) - less sticky, smoother glide
+      // Scroll bounds with resistance - prevents hard stops, adds rubber-band feel
+      const minBound = 0;
+      const maxBound = data.length - 1;
+      const overscrollResistance = 0.15; // How much resistance at bounds
+
+      // Apply scroll bounds with soft resistance
+      let boundedSpeed = speedRef.current;
+      if (positionRef.current < minBound) {
+        // Approaching/past lower bound - add resistance
+        const overshoot = minBound - positionRef.current;
+        boundedSpeed *= Math.max(0.3, 1 - overshoot * overscrollResistance);
+        // Gentle pull back towards bound
+        positionRef.current += overshoot * 0.05;
+      } else if (positionRef.current > maxBound) {
+        // Approaching/past upper bound - add resistance
+        const overshoot = positionRef.current - maxBound;
+        boundedSpeed *= Math.max(0.3, 1 - overshoot * overscrollResistance);
+        // Gentle pull back towards bound
+        positionRef.current -= overshoot * 0.05;
+      }
+
+      // Apply velocity with smoother deceleration
+      positionRef.current += boundedSpeed;
+
+      // Dampening with friction for controlled, slower motion (was 0.85, then 0.90)
+      // Lower value = more friction = slower, more dampened movement
+      speedRef.current *= 0.87;
 
       // Update all mesh transforms based on position
       objs.forEach((obj, i) => {
@@ -83,7 +108,9 @@ function ProjectSelector({
         obj.dist = Math.min(rawDist, 1);
 
         // Calculate visual properties based on distance
-        const scale = 1 - 0.2 * obj.dist;
+        // In attract mode, all cards are same scale (1.0) for layered depth effect
+        // Otherwise: Active card (dist=0) is full size at 1.0, inactive cards (dist=1) are slightly smaller at 0.9
+        const scale = attractMode ? .95 : (1.0 - 0.1 * obj.dist);
         const saturation = 1 - 0.8 * obj.dist;
         const opacity = 1 - 0.6 * obj.dist;
 
@@ -111,10 +138,21 @@ function ProjectSelector({
 
       // Attract mode: pull towards hovered navigation dot
       if (attractMode) {
-        positionRef.current += -(positionRef.current - attractTo) * 0.07;
+        // Smooth interpolation for navigation dot interaction
+        positionRef.current += -(positionRef.current - attractTo) * 0.08;
       } else {
-        // Magnetic snapping: smoother easing towards rounded position
-        positionRef.current += Math.sign(diff) * Math.pow(Math.abs(diff), 0.7) * 0.06;
+        // Softer magnetic snapping - more interpretive, less aggressive
+        // Only apply when velocity is low (user has stopped scrolling)
+        const velocityThreshold = 0.001;
+        const isSettling = Math.abs(speedRef.current) < velocityThreshold;
+
+        if (isSettling) {
+          // Very gentle "floating to rest" feeling with slow approach
+          // Higher power = slower approach as it gets closer
+          // Lower strength multiplier = slower overall pull
+          const snapStrength = Math.pow(Math.abs(diff), 1.2) * 0.025;
+          positionRef.current += Math.sign(diff) * snapStrength;
+        }
       }
 
       setIsCurrent(rounded);
