@@ -29,8 +29,7 @@ const bgTop = useSpring({
 
   return (
     <div className="background">
-
-    
+      <div className="left-ribbon" />
 
       {data.map((el, i) => {
 

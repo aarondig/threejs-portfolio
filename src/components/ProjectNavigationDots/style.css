@@ -1,24 +1,23 @@
 .project-navigation-dots {
   position: fixed;
-  right: clamp(30px, 3vw, 60px);
+  right: 64px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  gap: clamp(15px, 1.5vw, 25px);
+  gap: 0;
   align-items: flex-end;
   pointer-events: all;
-  padding: clamp(20px, 2vw, 35px) 0;
+  padding: 0;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .project-navigation-dots.container-hovered {
-  padding: clamp(20px, 2vw, 35px) clamp(30px, 3vw, 50px);
-  padding-left: clamp(40px, 4vw, 70px);
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(20px);
-  border-radius: clamp(40px, 4vw, 70px);
+  padding: 0;
+  background: transparent;
+  backdrop-filter: none;
+  border-radius: 0;
 }
 
 .nav-dot {
@@ -26,64 +25,77 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: clamp(15px, 1.5vw, 25px);
+  gap: 16px;
+  padding: 8px 0;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-dot-indicator {
-  width: clamp(6px, 0.6vw, 10px);
-  height: clamp(6px, 0.6vw, 10px);
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.4);
+  width: 8px;
+  height: 16px;
+  border-radius: 16777200px;
+  background-color: #e5e5e5;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
 }
 
 .nav-dot:hover .nav-dot-indicator {
-  background-color: rgba(255, 255, 255, 0.7);
-  transform: scale(1.2);
+  background-color: #e5e5e5;
+  opacity: 0.7;
+}
+
+.nav-dot {
+  opacity: 0.4;
+}
+
+.nav-dot.active {
+  opacity: 1;
 }
 
 .nav-dot.active .nav-dot-indicator {
-  background-color: rgba(255, 255, 255, 1);
-  width: clamp(8px, 0.8vw, 12px);
-  height: clamp(8px, 0.8vw, 12px);
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+  background-color: #e5e5e5;
 }
 
 .nav-dot.hovered .nav-dot-indicator {
-  background-color: rgba(255, 255, 255, 0.9);
-  transform: scale(1.3);
+  background-color: #e5e5e5;
+  opacity: 0.7;
 }
 
 .nav-dot-label {
   white-space: nowrap;
-  font-size: clamp(11px, 1vw, 15px);
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
-  opacity: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: right;
+  color: #e5e5e5;
   pointer-events: all;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   text-transform: uppercase;
-  letter-spacing: clamp(0.5px, 0.08vw, 1.5px);
+  letter-spacing: 0;
+}
+
+/* Hide labels by default, show on hover */
+.nav-dot-label {
+  opacity: 0;
   transform: translateX(10px);
 }
 
-/* Only show labels when container is hovered */
 .project-navigation-dots.container-hovered .nav-dot-label {
-  opacity: 1;
+  opacity: 0.4;
   transform: translateX(0);
 }
 
-.nav-dot.active .nav-dot-label {
-  color: rgba(255, 255, 255, 1);
+.project-navigation-dots.container-hovered .nav-dot.active .nav-dot-label {
+  opacity: 1;
 }
 
-.nav-dot:hover .nav-dot-label,
-.nav-dot.hovered .nav-dot-label {
-  color: rgba(255, 255, 255, 0.9);
+.project-navigation-dots.container-hovered .nav-dot:hover .nav-dot-label,
+.project-navigation-dots.container-hovered .nav-dot.hovered .nav-dot-label {
+  opacity: 0.7;
 }
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

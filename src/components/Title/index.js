@@ -63,11 +63,18 @@ function Header({
       {/* <a.div className="disappearBox" ref={disappearBox} style={disappear}> */}
       <a.div className="disappearBox" style={disappear}>
         <a.h3 className="subtitle">{el.description}</a.h3>
-
-        {/* <a.div className="btn" style={btnStyle} onMouseOver={()=> setBtnHover(true)} onMouseLeave={()=> setBtnHover(false)} onClick={() => handleClick()}>
-              <a.h4 className="btn-text" style={btnText}>Learn More</a.h4>
-            </a.div> */}
       </a.div>
+
+      <div
+        className="open-case-study-btn"
+        onClick={() => handleClick()}
+        style={disappear}
+      >
+        <span>Open Case Study</span>
+        <div className="arrow-icon">
+          <img src="/assets/arrow-icon.svg" alt="Arrow" />
+        </div>
+      </div>
     </a.div>
   );
 }
@@ -80,26 +87,24 @@ function Title({ isCurrent, isPopup, handleClick, size, attractMode }) {
     data.map((el, i) => ({
       from: {
         opacity: 0,
-        // background: el.background,
       },
       to: {
-        transform: isPopup || attractMode ? `translateY(${50}px)` : `translateY(-0px)`,
+        transform: isPopup || attractMode ? `translate3d(0, 50px, 0)` : `translate3d(0, 0, 0)`,
         opacity: isPopup || attractMode ? 0 : i === isCurrent ? 1 : 0,
-
-        // transform: i === isCurrent ? "translateY(0)" : `translateY(${-30}px)`,
       },
-
       config: {
-        duration: 300,
+        tension: 280,
+        friction: 60,
       },
+      immediate: isPopup || attractMode,
     }))
   );
 
   const appear = useSpring({
-    transform: !isPopup ? `translateY(${50}px)` : `translateY(-0px)`,
     opacity: !isPopup ? 0 : 1,
+    y: !isPopup ? 50 : 0,
     delay: 400,
-    config: { duration: 200 },
+    config: { tension: 280, friction: 60 },
   });
 
   const { opacity } = useSpring({
@@ -126,15 +131,32 @@ function Title({ isCurrent, isPopup, handleClick, size, attractMode }) {
 
   return (
     <a.div id="title" style={titleStyle}>
-      <div className="left-panel">
-        {data.map((el, i) => {
-          return <Header el={el} i={i} key={i} {...headerProps} />;
-        })}
+      <div className="title-section">
+        <div className="title-and-nav">
+          <div className="title-content">
+            {data.map((el, i) => {
+              return <Header el={el} i={i} key={i} {...headerProps} />;
+            })}
+          </div>
+        </div>
+
+        {!isPopup && !attractMode && (
+          <div className="preview-box">
+            {data[isCurrent].banner && (
+              <img src={data[isCurrent].banner} alt={data[isCurrent].title} />
+            )}
+          </div>
+        )}
       </div>
-      <a.div className="right-panel" style={{ opacity }}></a.div>
 
       {isPopup ? (
-        <a.h1 className="big-title" style={appear}>
+        <a.h1
+          className="big-title"
+          style={{
+            opacity: appear.opacity,
+            transform: appear.y.to(y => `translate3d(0, calc(-50% + ${y}px), 0)`)
+          }}
+        >
           {data[isCurrent].title}
         </a.h1>
       ) : (

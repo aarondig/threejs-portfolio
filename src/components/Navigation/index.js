@@ -53,9 +53,9 @@ function Navigation({ location, basename, setIsPopup }) {
           </a.div>
         </div>
         <div className="rightNav">
-          <Link to={`/about`}>
-            <div className="navItem">About Me</div>
-          </Link>
+          <div className="menu-icon">
+            <img src="/assets/menu-icon.svg" alt="Menu" />
+          </div>
         </div>
       </div>
     </div>
