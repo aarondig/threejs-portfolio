@@ -1,0 +1,29 @@
+/* Button Component Styles */
+
+.sds-button {
+  background-color: var(--sds-color-primary);
+  color: var(--sds-color-primary-foreground);
+  font-family: var(--family-sans);
+  font-weight: var(--weight-medium);
+  font-size: var(--size-lg);
+  line-height: 28px;
+  letter-spacing: var(--tracking-normal);
+  padding: var(--sds-size-space-300) var(--sds-size-space-800);
+  border-radius: var(--sds-size-radius-full);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sds-size-space-200);
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+  box-shadow: var(--shadow-xs);
+}
+
+.sds-button:hover {
+  opacity: 0.9;
+}
+
+.sds-button:active {
+  opacity: 0.8;
+}

@@ -8,6 +8,11 @@ import useScrollLock from "../../hooks/scrollLock";
 import Tech from "../../components/Sections/Tech";
 import Slideshow from "../../components/Sections/Slideshow";
 import Gallery from "../../components/Sections/Gallery";
+import Hero from "../../components/ProjectPage/Hero";
+import Wrapper from "../../components/ProjectPage/Wrapper";
+import Overview from "../../components/ProjectPage/Overview";
+import Footer from "../../components/ProjectPage/Footer";
+import ContentSection from "../../components/ProjectPage/ContentSection";
 
 function Project({ isCurrent }) {
   const size = useWindowSize();
@@ -15,6 +20,9 @@ function Project({ isCurrent }) {
   const scroller = useRef();
 
   const requestRef = useRef();
+
+  const project = data[isCurrent];
+  const useDesignSystem = project.useDesignSystem;
 
   
 
@@ -69,18 +77,49 @@ function Project({ isCurrent }) {
     };
   }, []);
   
+  // Render with design system if enabled
+  if (useDesignSystem) {
+    return (
+      <div id="project" className="project-page-sds">
+        <div className="scroller" ref={scroller}>
+          <Wrapper>
+            <Overview
+              description={project.overview?.description}
+              aboutRailsr={project.overview?.aboutRailsr}
+              problem={project.overview?.problem}
+              metadata={project.overview?.metadata}
+              prototypeUrl={project.overview?.prototypeUrl}
+            />
+
+            {project.sections.map((el, i) => (
+              <ContentSection
+                key={i}
+                section={el}
+                isCurrent={isCurrent}
+                size={size}
+              />
+            ))}
+          </Wrapper>
+
+          <Footer />
+        </div>
+      </div>
+    );
+  }
+
+  // Legacy rendering for existing projects
   return (
     <div id="project">
       <div className="scroller" ref={scroller}>
         <div className="text-wrap">
           <div className="section">
             <h4 className="subtitle">About This Project</h4>
-            <h1 className="title">{data[isCurrent].tagline}</h1>
+            <h1 className="title">{project.tagline}</h1>
             {/* <div className="row"> */}
             <div className="description-c">
-            {data[isCurrent].about.map((el, i)=>{
+            {project.about.map((el, i)=>{
               return (
-              <p className="description" key={i}>{data[isCurrent].about[i]}</p>
+              <p className="description" key={i}>{project.about[i]}</p>
               )
             })}
             </div>
@@ -88,23 +127,23 @@ function Project({ isCurrent }) {
             <div className="details">
               <div className="detail">
                 <p className="label">Role</p>
-                <p className="text">{data[isCurrent].role}</p>
+                <p className="text">{project.role}</p>
               </div>
               <div className="detail">
                 <p className="label">Client</p>
-                <p className="text">{data[isCurrent].client}</p>
+                <p className="text">{project.client}</p>
               </div>
               <div className="detail">
                 <p className="label">Date</p>
-                <p className="text">{data[isCurrent].date}</p>
+                <p className="text">{project.date}</p>
               </div>
             </div>
             {/* </div> */}
 
-         
+
           </div>
 
-          {data[isCurrent].sections.map((el, i) => {
+          {project.sections.map((el, i) => {
             switch (el.type) {
               default: {
                 return (
@@ -144,7 +183,7 @@ function Project({ isCurrent }) {
                 );
               }
               case "gallery": {
-                
+
                 return (
                   <div className="section" key={i}>
                     <Gallery el={el} isCurrent={isCurrent} size={size}/>
@@ -153,7 +192,7 @@ function Project({ isCurrent }) {
               }
             }
           })}
-          
+
         </div>
       </div>
     </div>

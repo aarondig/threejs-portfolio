@@ -1,0 +1,152 @@
+/* Section Override Styles - Apply design system spacing to existing sections */
+
+/* Override scroller for design system pages - keep canvas visible */
+.project-page-sds .scroller {
+  margin-top: 100vh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Reset legacy wrapper styles */
+.project-page-sds .text-wrap {
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Reset section styles for design system */
+.project-page-sds .section {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+.project-page-sds .sds-content-section {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.project-page-sds #article {
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.project-page-sds #gallery {
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.project-page-sds #image {
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.project-page-sds #slideshow {
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.project-page-sds #tech {
+  padding: 0;
+  margin-bottom: 0;
+}
+
+/* Apply border radius to images in sections */
+.project-page-sds #image .image-container img {
+  border-radius: var(--sds-size-radius-lg);
+  overflow: clip;
+}
+
+/* Image section within wrapper */
+.sds-image-section {
+  border-bottom: 1px solid var(--sds-color-border);
+  width: 100%;
+  padding: var(--sds-size-space-1600) 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sds-image-section__image {
+  height: 640px;
+  min-height: 220px;
+  width: 100%;
+  border-radius: var(--sds-size-radius-lg);
+  overflow: hidden;
+  position: relative;
+}
+
+.sds-image-section__image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  border-radius: var(--sds-size-radius-lg);
+  pointer-events: none;
+}
+
+/* Grid section */
+.sds-grid-section {
+  width: 100%;
+  padding: var(--sds-size-space-1600) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.sds-image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+.sds-image-grid__item {
+  background-color: #6562ff;
+  border-radius: var(--sds-size-radius-lg);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+}
+
+.sds-image-grid__item img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  pointer-events: none;
+}
+
+/* Mobile Responsive */
+@media only screen and (max-width: 768px) {
+  .project-page-sds .sds-content-section {
+    padding: 0 var(--sds-size-space-600);
+  }
+
+  .sds-image-section {
+    padding: var(--sds-size-space-600) 0;
+  }
+
+  .sds-image-section__image {
+    height: 400px;
+  }
+
+  .sds-grid-section {
+    padding: var(--sds-size-space-600) 0;
+  }
+
+  .sds-image-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -56,15 +56,14 @@ function Header({
 
   return (
     <a.div className="title-c" style={springs[i]} key={i}>
-      {/* <a.h1 className="title" style={slideDown}>{el.title}</a.h1> */}
-      <a.h1 className="title" style={disappear}>
-        {el.title}
-      </a.h1>
-      {/* <a.div className="disappearBox" ref={disappearBox} style={disappear}> */}
-      <a.div className="disappearBox" style={disappear}>
-        <a.h3 className="subtitle">{el.description}</a.h3>
-      </a.div>
-
+      <div className="text-wrapper">
+        <a.h1 className="title" style={disappear}>
+          {el.title}
+        </a.h1>
+        <a.h3 className="subtitle" style={disappear}>
+          {el.description}
+        </a.h3>
+      </div>
       <div
         className="open-case-study-btn"
         onClick={() => handleClick()}
@@ -132,8 +131,8 @@ function Title({ isCurrent, isPopup, handleClick, size, attractMode }) {
   return (
     <a.div id="title" style={titleStyle}>
       <div className="title-section">
-        <div className="title-and-nav">
-          <div className="title-content">
+        <div className="main-content">
+          <div className="title-content-wrapper">
             {data.map((el, i) => {
               return <Header el={el} i={i} key={i} {...headerProps} />;
             })}
@@ -141,27 +140,50 @@ function Title({ isCurrent, isPopup, handleClick, size, attractMode }) {
         </div>
 
         {!isPopup && !attractMode && (
-          <div className="preview-box">
-            {data[isCurrent].banner && (
-              <img src={data[isCurrent].banner} alt={data[isCurrent].title} />
-            )}
+          <div className="bottom-section">
+            <div className="preview-box">
+              {data[isCurrent].banner && (
+                <img src={data[isCurrent].banner} alt={data[isCurrent].title} />
+              )}
+            </div>
+            <a
+              href="https://aarondig.com"
+              className="grid-button"
+              aria-label="View all projects"
+            >
+              <svg
+                width="26"
+                height="26"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="4.33" cy="4.33" r="1.08" />
+                <circle cx="11.92" cy="4.33" r="1.08" />
+                <circle cx="19.5" cy="4.33" r="1.08" />
+                <circle cx="4.33" cy="11.92" r="1.08" />
+                <circle cx="11.92" cy="11.92" r="1.08" />
+                <circle cx="19.5" cy="11.92" r="1.08" />
+                <circle cx="4.33" cy="19.5" r="1.08" />
+                <circle cx="11.92" cy="19.5" r="1.08" />
+                <circle cx="19.5" cy="19.5" r="1.08" />
+              </svg>
+            </a>
           </div>
         )}
-      </div>
 
-      {isPopup ? (
-        <a.h1
-          className="big-title"
-          style={{
-            opacity: appear.opacity,
-            transform: appear.y.to(y => `translate3d(0, calc(-50% + ${y}px), 0)`)
-          }}
-        >
-          {data[isCurrent].title}
-        </a.h1>
-      ) : (
-        <></>
-      )}
+        {isPopup && (
+          <a.h1
+            className="big-title"
+            style={{
+              opacity: appear.opacity,
+              transform: appear.y.to(y => `translate3d(0, calc(-50% + ${y}px), 0)`)
+            }}
+          >
+            {data[isCurrent].title}
+          </a.h1>
+        )}
+      </div>
     </a.div>
   );
 }

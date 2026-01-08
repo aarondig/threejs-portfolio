@@ -6,7 +6,7 @@ export const data = [
       "Worked with Visa and our vendor to design a credit card for our Credit Card as a Service customers.",
 
     link: "",
-    banner: require("../Assets/Images/Projects/credit card/large/Banner.png"),
+    banner: require("../Assets/Images/Projects/credit card/small/Banner.png"),
 
     tagline: "The Task",
     about: [
@@ -227,7 +227,7 @@ export const data = [
       "Design a Credit Card as a Service product with an embeddable rewards system for a pitch to their CTO.",
 
     link: "",
-    banner: require("../Assets/Images/Projects/lululemon/large/Banner.png"),
+    banner: require("../Assets/Images/Projects/lululemon/small/Banner.png"),
 
     tagline: "Building an Ecosystem",
     about: [
@@ -485,5 +485,211 @@ export const data = [
 
     color: "",
     background: "#FBB034",
+  },
+  {
+    id: "sdkdesign",
+    title: "Sdk Design",
+    description: "I designed the 'Make a Payment' UI flow for Railsr's Credit-Card-as-a-Service SDK.",
+
+    link: "",
+    banner: "https://www.figma.com/api/mcp/asset/64ade847-458d-46d8-800f-76c8ffbb9a44",
+
+    tagline: "Overview",
+    about: [
+      `I designed the "Make a Payment" UI flow for Railsr's Credit-Card-as-a-Service SDK.`,
+    ],
+
+    client: "Railsr",
+    role: "Product Designer",
+    date: "2023",
+    disciplines: ["SDK Design", "Product Design"],
+
+    // Use new design system fields
+    useDesignSystem: true,
+    overview: {
+      description: `I designed the "Make a Payment" UI flow for Railsr's Credit-Card-as-a-Service SDK.`,
+      aboutRailsr: `Railsr is a Banking-as-a-Service (BaaS) platform that enables companies to embed financial products—like credit cards—directly into their own apps APIs.`,
+      problem: `How might we design a credit card payment experience that is adaptable for partner brands, compliant with financial regulations, and effortless for users?`,
+      prototypeUrl: "#",
+      metadata: {
+        role: "Product Designer",
+        company: "Railsr",
+        tools: "Figma & Miro",
+        team: "1 Designer, 1 Legal, 1 PM, 3 Devs"
+      }
+    },
+
+    sections: [
+      {
+        type: "image",
+        src: "https://www.figma.com/api/mcp/asset/ec53e7d3-e7f9-4235-b07e-847c35a6a0b6",
+        caption: "SDK Design Overview",
+      },
+      {
+        type: "outcomes",
+        title: "Outcomes",
+        description: "This work is currently servicing 220 B2B clients — up to 5.5 million end-users globally.",
+        outcomes: [
+          {
+            icon: "user",
+            title: "User Efficiency",
+            description: "Reduced payment completion time by 40% after consolidating multi-screen flows into a single interaction."
+          },
+          {
+            icon: "maximize",
+            title: "Design Scalability",
+            description: "Established scalable, white-label SDKs that enabled client brands to launch legally compliant, fully branded payment experiences without custom redesigns."
+          },
+          {
+            icon: "trending-up",
+            title: "Business Efficiency",
+            description: "Increased SDK adoption to 60% and reduced client integration time by 83%, saving roughly 400 design and engineering hours per implementation."
+          }
+        ],
+        image: "https://www.figma.com/api/mcp/asset/ec53e7d3-e7f9-4235-b07e-847c35a6a0b6",
+      },
+      {
+        type: "grid",
+        images: [
+          { src: "https://www.figma.com/api/mcp/asset/fe6eb68b-1cbd-4f45-9e59-abe64c30084a", caption: "Wallet Screen" },
+          { src: "https://www.figma.com/api/mcp/asset/536460d6-56b7-49db-844d-7628cc8cacf6", caption: "Choose Amount" },
+          { src: "https://www.figma.com/api/mcp/asset/d86b1972-fad7-4997-bc2e-90c667d5fd6a", caption: "AutoPay Screen" },
+          { src: "https://www.figma.com/api/mcp/asset/95e2870f-4150-477d-b121-3c734553b195", caption: "Payment Submitted" },
+          { src: "https://www.figma.com/api/mcp/asset/ebac8627-643b-49a6-9748-265449af5a1d", caption: "Confirm Details" },
+          { src: "https://www.figma.com/api/mcp/asset/49ede246-3052-48f8-8145-0d0794b1b870", caption: "Custom Amount" },
+        ]
+      }
+    ],
+
+    icon: "fa-credit-card",
+    color: "",
+    background: "#6562ff",
+  },
+  {
+    id: "railsr-deck",
+    title: "Sales Deck Design",
+    description: "Applying visual identity to marketing and sales assets after a rebrand.",
+
+    link: "",
+    banner: "/assets/railsr/banner.jpg",
+
+    useDesignSystem: true,
+
+    overview: {
+      description: "Applying visual identity to marketing and sales assets after a rebrand.",
+      aboutRailsr: "Railsr is a embedded finance platform that enables companies to launch products—like branded credit cards—into their own customer offerings.",
+      problem: "Design a deck template that elevates the current visual identity and can be reused across marketing and sales.",
+      prototypeUrl: "#",
+      metadata: {
+        role: "Visual Designer",
+        company: "Railsr",
+        tools: "Figma & Google Slides",
+        team: "Copy Writer & Visual Designer"
+      }
+    },
+
+    sections: [
+      {
+        type: "image",
+        src: "/assets/railsr/banner.jpg",
+        caption: "Sales deck overview"
+      },
+      {
+        type: "imagewithheader",
+        title: "Before",
+        subtitle: "There were no official brand guidelines, just a series of colors and mood board images with recommended fonts.",
+        showIcon: true,
+        columns: 2,
+        images: [
+          { src: "/assets/railsr/before/slide-01.jpg", caption: "Footer" },
+          { src: "/assets/railsr/before/slide-02.jpg", caption: "Image 2" },
+          { src: "/assets/railsr/before/slide-03.jpg", caption: "Home" },
+          { src: "/assets/railsr/before/slide-04.jpg", caption: "Image" },
+          { src: "/assets/railsr/before/slide-05.jpg", caption: "Color" },
+          { src: "/assets/railsr/before/slide-06.jpg", caption: "Page" }
+        ]
+      },
+      {
+        type: "processlist",
+        title: "Process",
+        description: "Deconstructing existing elements, and recreating applying them in Figma.",
+        items: [
+          {
+            icon: "palette",
+            title: "Colors and Gradients",
+            description: "I pulled key colors and gradients from existing elements like the website and mood-board images."
+          },
+          {
+            icon: "type",
+            title: "Font Styling",
+            description: "Assessing font legibility, the chosen font type, \"Ubuntu\" was hard to read on the backdrop of images."
+          },
+          {
+            icon: "paintbrush",
+            title: "Component Styling",
+            description: "Sharp edges of buttons, thin lines, and lots of color."
+          }
+        ],
+        images: [
+          { src: "/assets/railsr/process/image-to-gradients.jpg", caption: "Image to gradients" },
+          { src: "/assets/railsr/process/colors-and-gradients.jpg", caption: "Colors and gradients" }
+        ]
+      },
+      {
+        type: "image",
+        src: "/assets/railsr/section-title.jpg",
+        caption: "Section title"
+      },
+      {
+        type: "imagewithheader",
+        title: "After",
+        subtitle: "I created a variety of reusable visual assets and deck slides.",
+        showIcon: true,
+        columns: 2,
+        images: [
+          { src: "/assets/railsr/after/slide-01.jpg", caption: "Divider" },
+          { src: "/assets/railsr/after/slide-02.jpg", caption: "The future" },
+          { src: "/assets/railsr/after/slide-03.jpg", caption: "Mission" },
+          { src: "/assets/railsr/after/slide-04.jpg", caption: "Your Brand" },
+          { src: "/assets/railsr/after/slide-05.jpg", caption: "Font" },
+          { src: "/assets/railsr/after/slide-06.jpg", caption: "Index" },
+          { src: "/assets/railsr/after/slide-07.jpg", caption: "Key Point" },
+          { src: "/assets/railsr/after/slide-08.jpg", caption: "Insights" },
+          { src: "/assets/railsr/after/slide-09.jpg", caption: "Overview" },
+          { src: "/assets/railsr/after/slide-10.jpg", caption: "Mockup" }
+        ]
+      },
+      {
+        type: "processlist",
+        title: "Design Decisions",
+        description: "I created visualized our key product offering, updated accessibility standards, and refreshed the visual identity.",
+        items: [
+          {
+            icon: "credit-card",
+            title: "Credit Card Visual",
+            description: "Using our CCAS card designs (which I also designed) I was able to overlay gradients to create a back-lit card visual. This blended our our key product offering with the new branding."
+          },
+          {
+            icon: "moon",
+            title: "Dark Theme",
+            description: "The gradients were overstimulating when used together on colored backgrounds, so instead I used used selectively to draw attention and build suspense with a dark background."
+          },
+          {
+            icon: "type",
+            title: "Font Choice",
+            description: "The previous font raised accessibility concerns when used in dense text, so I reserved it for decorative styling instead of body text. I chose a simple Sans Serif to minimize complexity, and draw attention to selective uses of color."
+          }
+        ],
+        images: [
+          { src: "/assets/railsr/design-decisions/credit-card-flow.jpg", caption: "Credit card flow" },
+          { src: "/assets/railsr/design-decisions/banner-design.jpg", caption: "Banner design" },
+          { src: "/assets/railsr/design-decisions/font-title.jpg", caption: "Font title" },
+          { src: "/assets/railsr/design-decisions/font-example.jpg", caption: "Font example" }
+        ]
+      }
+    ],
+
+    icon: "fa-presentation",
+    background: "#6562ff"
   },
 ];

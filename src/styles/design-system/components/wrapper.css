@@ -1,0 +1,21 @@
+/* Wrapper Component Styles */
+
+.sds-wrapper {
+  background-color: var(--sds-color-background-default);
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 var(--sds-size-space-1600);
+  box-sizing: border-box;
+  padding-top: 4vw;
+}
+
+/* Mobile Responsive */
+@media only screen and (max-width: 768px) {
+  .sds-wrapper {
+    padding: 0 var(--sds-size-space-600);
+  }
+}
