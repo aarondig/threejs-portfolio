@@ -488,23 +488,18 @@ export const data = [
   },
   {
     id: "sdkdesign",
-    title: "Sdk Design",
+    title: "SDK Design",
     description: "I designed the 'Make a Payment' UI flow for Railsr's Credit-Card-as-a-Service SDK.",
-
     link: "",
-    banner: "https://www.figma.com/api/mcp/asset/64ade847-458d-46d8-800f-76c8ffbb9a44",
-
+    banner: require("../Assets/Images/Projects/sdkdesign/banner - sdk.jpg"),
     tagline: "Overview",
     about: [
       `I designed the "Make a Payment" UI flow for Railsr's Credit-Card-as-a-Service SDK.`,
     ],
-
     client: "Railsr",
     role: "Product Designer",
     date: "2023",
     disciplines: ["SDK Design", "Product Design"],
-
-    // Use new design system fields
     useDesignSystem: true,
     overview: {
       description: `I designed the "Make a Payment" UI flow for Railsr's Credit-Card-as-a-Service SDK.`,
@@ -518,11 +513,10 @@ export const data = [
         team: "1 Designer, 1 Legal, 1 PM, 3 Devs"
       }
     },
-
     sections: [
       {
         type: "image",
-        src: "https://www.figma.com/api/mcp/asset/ec53e7d3-e7f9-4235-b07e-847c35a6a0b6",
+        src: require("../Assets/Images/Projects/sdkdesign/Horseshoe.jpg"),
         caption: "SDK Design Overview",
       },
       {
@@ -546,21 +540,20 @@ export const data = [
             description: "Increased SDK adoption to 60% and reduced client integration time by 83%, saving roughly 400 design and engineering hours per implementation."
           }
         ],
-        image: "https://www.figma.com/api/mcp/asset/ec53e7d3-e7f9-4235-b07e-847c35a6a0b6",
+        image: require("../Assets/Images/Projects/sdkdesign/Horseshoe.jpg"),
       },
       {
         type: "grid",
         images: [
-          { src: "https://www.figma.com/api/mcp/asset/fe6eb68b-1cbd-4f45-9e59-abe64c30084a", caption: "Wallet Screen" },
-          { src: "https://www.figma.com/api/mcp/asset/536460d6-56b7-49db-844d-7628cc8cacf6", caption: "Choose Amount" },
-          { src: "https://www.figma.com/api/mcp/asset/d86b1972-fad7-4997-bc2e-90c667d5fd6a", caption: "AutoPay Screen" },
-          { src: "https://www.figma.com/api/mcp/asset/95e2870f-4150-477d-b121-3c734553b195", caption: "Payment Submitted" },
-          { src: "https://www.figma.com/api/mcp/asset/ebac8627-643b-49a6-9748-265449af5a1d", caption: "Confirm Details" },
-          { src: "https://www.figma.com/api/mcp/asset/49ede246-3052-48f8-8145-0d0794b1b870", caption: "Custom Amount" },
+          { src: require("../Assets/Images/Projects/sdkdesign/Wallet - Screen - SDK.jpg"), caption: "Wallet Screen" },
+          { src: require("../Assets/Images/Projects/sdkdesign/Choose Amount - Blue - Screen - SDK.jpg"), caption: "Choose Amount" },
+          { src: require("../Assets/Images/Projects/sdkdesign/AutoPay - Screen - SDK.jpg"), caption: "AutoPay Screen" },
+          { src: require("../Assets/Images/Projects/sdkdesign/Payment Submitted - Screen - SDK.jpg"), caption: "Payment Submitted" },
+          { src: require("../Assets/Images/Projects/sdkdesign/Confirm Details - Pay Later - Screen - SDK.jpg"), caption: "Confirm Details" },
+          { src: require("../Assets/Images/Projects/sdkdesign/Custom Choose Amount - Screen - SDK.jpg"), caption: "Custom Amount" },
         ]
       }
     ],
-
     icon: "fa-credit-card",
     color: "",
     background: "#6562ff",
@@ -569,12 +562,9 @@ export const data = [
     id: "railsr-deck",
     title: "Sales Deck Design",
     description: "Applying visual identity to marketing and sales assets after a rebrand.",
-
     link: "",
     banner: "/assets/railsr/banner.jpg",
-
     useDesignSystem: true,
-
     overview: {
       description: "Applying visual identity to marketing and sales assets after a rebrand.",
       aboutRailsr: "Railsr is a embedded finance platform that enables companies to launch products—like branded credit cards—into their own customer offerings.",
@@ -587,7 +577,6 @@ export const data = [
         team: "Copy Writer & Visual Designer"
       }
     },
-
     sections: [
       {
         type: "image",
@@ -688,7 +677,6 @@ export const data = [
         ]
       }
     ],
-
     icon: "fa-presentation",
     background: "#6562ff"
   },

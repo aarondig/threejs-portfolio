@@ -148,7 +148,6 @@ const Image = ({ i, mesh, isCurrent, handleClick, isPopup, scaleRef, attractMode
       handleClick(e, dataIndex);
     },
 
-    key: i,
     value: i,
   };
 
