@@ -36,7 +36,7 @@ function Project({ isCurrent }) {
 
   useEffect(() => {
     document.body.style.height = `${
-      scroller.current.getBoundingClientRect().height + size.height - 5
+      scroller.current.getBoundingClientRect().height + size.height
     }px`;
   }, [size.height]);
 
